@@ -11,7 +11,7 @@ var spotify = new Spotify(keys.spotify);
 
 // liri node commands 
 var command = process.argv[2];
-var query = process.argv[3];
+var queryThis = process.argv[3];
 // Movie request
 var movieThis = function (movieQuery) {
     var divider = "\n------------------------------------------------------------\n\n";
@@ -46,6 +46,10 @@ var movieThis = function (movieQuery) {
 var spotifyThis = function () {
     var divider = "\n------------------------------------------------------------\n\n";
     console.log(divider);
+    var query = process.argv[3]
+    if (query === undefined) {
+        query = "The Sign by Ace of Base";
+    }
     spotify.search({ type: 'track', query }, function (err, response, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
@@ -56,8 +60,8 @@ var spotifyThis = function () {
             "Album Name: " + response.tracks.items[0].album.name
         ].join("\n\n")
 
-        if (query === undefined) {
-            query === "The Sign by Ace of Base";
+        if (queryThis === undefined) {
+            queryThis === "The Sign by Ace of Base";
         }
         console.log(showData);
         // console.log(response.tracks.items[0].artists);
@@ -90,22 +94,22 @@ var concertThis = function (artistQuery) {
 }
 // app functionality by user input 
 if (command === "movie-this") {
-    movieThis(query);
+    movieThis(queryThis);
 } else if (command === "spotify-this-song") {
-    spotifyThis(query);
+    spotifyThis(queryThis);
 } else if (command === "concert-this") {
-    concertThis(query);
+    concertThis(queryThis);
 } else if (command === "do-what-it-says") {
     var fs = require("fs")
 
     fs.readFile("random.txt", "utf-8", function (error, data) {
         var command;
-        var query;
+        var queryThis;
 
         if (data.indexOf(",") !== -1) {
             var dataArr = data.split(",");
             command = dataArr[0];
-            query = dataArr[1];
+            queryThis = dataArr[1];
         } else {
             command = data;
         }
@@ -113,9 +117,9 @@ if (command === "movie-this") {
         if (command == "movie-this") {
             movieThis();
         } else if (command === "spotify-song-this") {
-            spotifyThis(query);
+            spotifyThis(queryThis);
         } else if (command === "concert-this") {
-            concertThis(query);
+            concertThis(queryThis);
         } 
     });
 } else if (command === undefined) {
